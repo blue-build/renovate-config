@@ -1,0 +1,40 @@
+name: Validate Renovate
+
+on:
+    pull_request:
+        paths:
+            - ".github/workflows/renovate.yml"
+            - "renovate-config.json"
+            - "renovate.json"
+            - "org-inherited-config.json"
+
+permissions:
+  contents: read
+
+jobs:
+    validate:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Setup Node.js
+              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+              with:
+                  node-version: latest
+
+            # Hosted Renovate should use the latest available version, so always
+            # install the newest version of Renovate
+            - name: Install dependencies
+              run: npm install -g renovate
+
+            - name: Validate repository config
+              run: renovate-config-validator --strict --no-global renovate.json
+
+            - name: Validate global config
+              run: renovate-config-validator --strict renovate-config.json
+
+            - name: Validate inherited config
+              run: renovate-config-validator --strict --no-global org-inherited-config.json
