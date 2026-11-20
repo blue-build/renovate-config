@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-global-schema.json",
-  "onboarding": false,
+  "onboarding": true,
   "autodiscover": true,
   "internalChecksFilter": "strict",
   "platform": "github",
